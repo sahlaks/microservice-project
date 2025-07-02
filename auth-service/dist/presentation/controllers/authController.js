@@ -41,7 +41,7 @@ class AuthController {
                 (0, setToken_1.setAuthCookie)(res, response.accessToken);
             }
             return res
-                .status(response.status ? statusCode_1.ENUM.OK : statusCode_1.ENUM.BAD_REQUEST)
+                .status(response.status ? statusCode_1.ENUM.OK : statusCode_1.ENUM.UNAUTHORIZED)
                 .json({ status: response === null || response === void 0 ? void 0 : response.status, message: response === null || response === void 0 ? void 0 : response.message });
         });
     }

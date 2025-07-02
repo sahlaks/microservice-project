@@ -6,7 +6,7 @@ import { setAuthCookie } from "../../infrastructure/utils/setToken";
 export class AuthController {
   constructor(private authUseCase: AuthUseCase) {}
 
-  
+
   //@desc Create a new User
   //@route POST /signup
   //@acess User
@@ -32,7 +32,7 @@ export class AuthController {
       setAuthCookie(res, response.accessToken);
     }
      return res
-      .status(response.status ? ENUM.OK : ENUM.BAD_REQUEST)
+      .status(response.status ? ENUM.OK : ENUM.UNAUTHORIZED)
       .json({ status: response?.status, message: response?.message });
   }
 }

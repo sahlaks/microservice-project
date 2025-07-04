@@ -22,6 +22,17 @@ app.use('/api/auth',
 })
 )
 
+//@proxy for project-service 
+app.use('/api/project', 
+    createProxyMiddleware({
+    target:process.env.PROJECT_SERVICE_URL,
+    changeOrigin: true, 
+     pathRewrite: {
+    '^/api/project': '',
+  },
+})
+)
+
 
 //@server is running at 5000
 app.listen(process.env.PORT,()=>{

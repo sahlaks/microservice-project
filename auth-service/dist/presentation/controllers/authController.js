@@ -22,13 +22,12 @@ class AuthController {
     createUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.authUseCase.createUser(req.body);
-            console.log(response);
             if (response.status && response.accessToken) {
                 (0, setToken_1.setAuthCookie)(res, response.accessToken);
             }
             return res
                 .status(response.status ? statusCode_1.ENUM.CREATED : statusCode_1.ENUM.BAD_REQUEST)
-                .json({ status: response === null || response === void 0 ? void 0 : response.status, message: response === null || response === void 0 ? void 0 : response.message });
+                .json({ status: response === null || response === void 0 ? void 0 : response.status, user: response === null || response === void 0 ? void 0 : response.user, message: response === null || response === void 0 ? void 0 : response.message });
         });
     }
     //@desc Login a User
@@ -42,7 +41,7 @@ class AuthController {
             }
             return res
                 .status(response.status ? statusCode_1.ENUM.OK : statusCode_1.ENUM.UNAUTHORIZED)
-                .json({ status: response === null || response === void 0 ? void 0 : response.status, message: response === null || response === void 0 ? void 0 : response.message });
+                .json({ status: response === null || response === void 0 ? void 0 : response.status, user: response === null || response === void 0 ? void 0 : response.user, message: response === null || response === void 0 ? void 0 : response.message });
         });
     }
 }

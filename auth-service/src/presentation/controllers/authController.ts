@@ -12,14 +12,13 @@ export class AuthController {
   //@acess User
   async createUser(req: Request, res: Response, next: NextFunction) {
     const response = await this.authUseCase.createUser(req.body);
-    console.log(response);
-
+    
     if (response.status && response.accessToken) {
       setAuthCookie(res, response.accessToken);
     }
     return res
       .status(response.status ? ENUM.CREATED : ENUM.BAD_REQUEST)
-      .json({ status: response?.status, message: response?.message });
+      .json({ status: response?.status, user: response?.user, message: response?.message });
   }
 
 
@@ -28,11 +27,12 @@ export class AuthController {
   //@acess User
   async loginUser(req: Request, res: Response, next: NextFunction) {
     const response = await this.authUseCase.loginUser(req.body)
+  
     if (response.status && response.accessToken) {
       setAuthCookie(res, response.accessToken);
     }
      return res
       .status(response.status ? ENUM.OK : ENUM.UNAUTHORIZED)
-      .json({ status: response?.status, message: response?.message });
+      .json({ status: response?.status, user: response?.user, message: response?.message });
   }
 }

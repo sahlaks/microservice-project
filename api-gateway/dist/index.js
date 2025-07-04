@@ -21,6 +21,14 @@ app.use('/api/auth', (0, http_proxy_middleware_1.createProxyMiddleware)({
         '^/api/auth': '',
     },
 }));
+//@proxy for project-service 
+app.use('/api/project', (0, http_proxy_middleware_1.createProxyMiddleware)({
+    target: process.env.PROJECT_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/project': '',
+    },
+}));
 //@server is running at 5000
 app.listen(process.env.PORT, () => {
     console.log(`API Gateway running at ${process.env.PORT}`);

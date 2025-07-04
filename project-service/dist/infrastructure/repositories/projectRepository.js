@@ -18,10 +18,26 @@ class ProjectRepository {
             return saveproject;
         });
     }
-    getProjects() {
+    getProjects(skip, limit) {
         return __awaiter(this, void 0, void 0, function* () {
-            const projects = yield projectModels_1.projectModel.find().sort({ createdAt: -1 });
+            const projects = yield projectModels_1.projectModel.find().skip(skip).limit(limit).sort({ createdAt: -1 });
             return projects;
+        });
+    }
+    countProjects() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield projectModels_1.projectModel.countDocuments();
+        });
+    }
+    deleteProject(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield projectModels_1.projectModel.findByIdAndDelete(id);
+        });
+    }
+    editProject(data, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const updated = yield projectModels_1.projectModel.findByIdAndUpdate(id, data, { new: true });
+            return updated;
         });
     }
 }

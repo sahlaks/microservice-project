@@ -24,7 +24,11 @@ class ProjectController {
             const validatedData = projectSchema_1.projectSchema.parse(req.body);
             const response = yield this.projectUseCase.createProject(validatedData);
             if (response.status) {
-                res.status(statusCodes_1.STATUS_CODES.OK).json({ status: response === null || response === void 0 ? void 0 : response.status, data: response === null || response === void 0 ? void 0 : response.data, message: response === null || response === void 0 ? void 0 : response.message });
+                res.status(statusCodes_1.STATUS_CODES.OK).json({
+                    status: response === null || response === void 0 ? void 0 : response.status,
+                    data: response === null || response === void 0 ? void 0 : response.data,
+                    message: response === null || response === void 0 ? void 0 : response.message,
+                });
             }
         });
     }
@@ -33,7 +37,43 @@ class ProjectController {
     //@acess User
     fetchAllProjects(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.projectUseCase.fetchAllProjects();
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 4;
+            const response = yield this.projectUseCase.fetchAllProjects(page, limit);
+            if (response === null || response === void 0 ? void 0 : response.status) {
+                res.status(statusCodes_1.STATUS_CODES.OK).json({
+                    status: response === null || response === void 0 ? void 0 : response.status,
+                    data: response === null || response === void 0 ? void 0 : response.data,
+                    message: response === null || response === void 0 ? void 0 : response.message,
+                    currentPage: response === null || response === void 0 ? void 0 : response.currentPage,
+                    totalPages: response === null || response === void 0 ? void 0 : response.totalPages,
+                    totalItems: response === null || response === void 0 ? void 0 : response.totalItems,
+                });
+            }
+        });
+    }
+    //@desc Delete a Project from database
+    //@route DELETE /delete
+    //@acess User
+    deleteProject(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = req.query.id;
+            const response = yield this.projectUseCase.deleteProject(id);
+            if (response.status) {
+                res
+                    .status(statusCodes_1.STATUS_CODES.OK)
+                    .json({ status: response === null || response === void 0 ? void 0 : response.status, message: response === null || response === void 0 ? void 0 : response.message });
+            }
+        });
+    }
+    //@desc Edit a Project from database
+    //@route PUT /update
+    //@acess User
+    editProject(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const validatedData = projectSchema_1.projectSchema.parse(req.body);
+            const id = req.query.id;
+            const response = yield this.projectUseCase.editProject(validatedData, id);
             if (response === null || response === void 0 ? void 0 : response.status) {
                 res.status(statusCodes_1.STATUS_CODES.OK).json({ status: response === null || response === void 0 ? void 0 : response.status, data: response === null || response === void 0 ? void 0 : response.data, message: response === null || response === void 0 ? void 0 : response.message });
             }

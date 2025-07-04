@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IProject } from "../../domain/entities/Project";
 import { IProjectRepository } from "../../domain/interface/IProjectRepository";
 import { ProjectType } from "../../domain/types/projectSchema";
@@ -9,8 +10,21 @@ export class ProjectRepository implements IProjectRepository {
         return saveproject;
     }
 
-    async getProjects(): Promise<IProject[]> {
-        const projects = await projectModel.find().sort({ createdAt: -1});
+    async getProjects(skip: number, limit:number): Promise<IProject[]> {
+        const projects = await projectModel.find().skip(skip).limit(limit).sort({ createdAt: -1});
         return projects;
+    }
+
+    async countProjects(): Promise<number> {
+         return await projectModel.countDocuments();
+    }
+
+    async deleteProject(id: Types.ObjectId) {
+        return await projectModel.findByIdAndDelete(id)
+    }
+
+    async editProject(data: ProjectType, id: Types.ObjectId): Promise<IProject | null> {
+        const updated = await projectModel.findByIdAndUpdate(id, data, {new: true})
+        return updated;
     }
 }

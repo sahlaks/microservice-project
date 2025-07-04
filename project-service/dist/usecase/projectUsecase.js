@@ -10,12 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectUseCase = void 0;
+const mongoose_1 = require("mongoose");
 const customErrors_1 = require("../constants/customErrors");
 const messages_1 = require("../constants/messages");
 class ProjectUseCase {
     constructor(projectRepository) {
         this.projectRepository = projectRepository;
     }
+    //@Create Project
     createProject(validatedData) {
         return __awaiter(this, void 0, void 0, function* () {
             const project = yield this.projectRepository.createProject(validatedData);
@@ -25,13 +27,45 @@ class ProjectUseCase {
             return { status: true, data: project, message: messages_1.PROJECT.PROJECT_CREATED };
         });
     }
-    fetchAllProjects() {
+    //@Get all Projects
+    fetchAllProjects(page, limit) {
         return __awaiter(this, void 0, void 0, function* () {
-            const projects = yield this.projectRepository.getProjects();
+            const skip = (page - 1) * limit;
+            const projects = yield this.projectRepository.getProjects(skip, limit);
+            const totalCount = yield this.projectRepository.countProjects();
             if (!projects) {
                 throw new customErrors_1.InternalServerError("Failed to fetch projects");
             }
-            return { status: true, data: projects, message: messages_1.PROJECT.ALL_FETCHED };
+            return {
+                status: true,
+                data: projects,
+                message: messages_1.PROJECT.ALL_FETCHED,
+                currentPage: page,
+                totalPages: Math.ceil(totalCount / limit),
+                totalItems: totalCount,
+            };
+        });
+    }
+    //@Delete Project
+    deleteProject(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const objectId = new mongoose_1.Types.ObjectId(id);
+            const deleted = yield this.projectRepository.deleteProject(objectId);
+            if (!deleted) {
+                throw new customErrors_1.NotFoundError("Project not found");
+            }
+            return { status: true, message: messages_1.PROJECT.PROJECT_DELETED };
+        });
+    }
+    //@Edit Project
+    editProject(validatedData, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const objectId = new mongoose_1.Types.ObjectId(id);
+            const updated = yield this.projectRepository.editProject(validatedData, objectId);
+            if (!updated) {
+                throw new customErrors_1.NotFoundError("Project not found");
+            }
+            return { status: true, message: messages_1.PROJECT.PROJECT_UPDATED, data: updated };
         });
     }
 }

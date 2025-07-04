@@ -14,4 +14,6 @@ const projectUsecase = new projectUsecase_1.ProjectUseCase(projectRepository);
 const projectController = new projectController_1.ProjectController(projectUsecase);
 projectRouter.post('/create', (0, asyncHandler_1.default)(projectController.createProject.bind(projectController)));
 projectRouter.get('/fetch-all', (0, asyncHandler_1.default)(projectController.fetchAllProjects.bind(projectController)));
+projectRouter.delete('/delete', (0, asyncHandler_1.default)(projectController.deleteProject.bind(projectController)));
+projectRouter.put('/update', (0, asyncHandler_1.default)(projectController.editProject.bind(projectController)));
 exports.default = projectRouter;

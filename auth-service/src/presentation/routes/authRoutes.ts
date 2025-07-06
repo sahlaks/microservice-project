@@ -11,4 +11,5 @@ const authController = new AuthController(authUsecase)
 
 authRouter.post('/login', asyncHandler(authController.loginUser.bind(authController)));
 authRouter.post('/signup', asyncHandler(authController.createUser.bind(authController)));
+authRouter.post('/logout', asyncHandler(authController.logoutUser.bind(authController)))
 export default authRouter;

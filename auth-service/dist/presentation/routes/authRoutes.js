@@ -14,4 +14,5 @@ const authUsecase = new authUsecase_1.AuthUseCase(authRepository);
 const authController = new authController_1.AuthController(authUsecase);
 authRouter.post('/login', (0, asyncHandler_1.default)(authController.loginUser.bind(authController)));
 authRouter.post('/signup', (0, asyncHandler_1.default)(authController.createUser.bind(authController)));
+authRouter.post('/logout', (0, asyncHandler_1.default)(authController.logoutUser.bind(authController)));
 exports.default = authRouter;

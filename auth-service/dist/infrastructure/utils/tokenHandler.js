@@ -11,5 +11,10 @@ const setAuthCookie = (res, token) => {
 };
 exports.setAuthCookie = setAuthCookie;
 const clearCookie = (req, res) => {
+    res.clearCookie("access_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+    });
 };
 exports.clearCookie = clearCookie;

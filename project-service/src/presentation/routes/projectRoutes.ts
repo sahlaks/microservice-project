@@ -9,9 +9,9 @@ const projectRepository = new ProjectRepository()
 const projectUsecase = new ProjectUseCase(projectRepository);
 const projectController = new ProjectController(projectUsecase);
 
-projectRouter.post('/create', asyncHandler(projectController.createProject.bind(projectController)));
-projectRouter.get('/fetch-all', asyncHandler(projectController.fetchAllProjects.bind(projectController)));
-projectRouter.delete('/delete', asyncHandler(projectController.deleteProject.bind(projectController)));
-projectRouter.put('/update', asyncHandler(projectController.editProject.bind(projectController)));
+projectRouter.post('/', asyncHandler(projectController.createProject.bind(projectController)));
+projectRouter.get('/', asyncHandler(projectController.fetchAllProjects.bind(projectController)));
+projectRouter.delete('/', asyncHandler(projectController.deleteProject.bind(projectController)));
+projectRouter.put('/', asyncHandler(projectController.editProject.bind(projectController)));
 
 export default projectRouter;

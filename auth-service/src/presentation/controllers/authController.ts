@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthUseCase } from "../../usecases/authUsecase";
 import { ENUM } from "../../constants/statusCode";
-import { setAuthCookie } from "../../infrastructure/utils/setToken";
+import { clearCookie, setAuthCookie } from "../../infrastructure/utils/tokenHandler";
+import { REGISTRATION } from "../../constants/messages";
 
 export class AuthController {
   constructor(private authUseCase: AuthUseCase) {}
@@ -34,5 +35,13 @@ export class AuthController {
      return res
       .status(response.status ? ENUM.OK : ENUM.UNAUTHORIZED)
       .json({ status: response?.status, user: response?.user, message: response?.message });
+  }
+
+//@desc Logout User
+//@ROUTE POST /logout
+//@acess User
+  async logoutUser(req: Request, res: Response, next: NextFunction) {
+    clearCookie(req,res);
+    res.status(ENUM.OK).json({status: true, message: REGISTRATION.LOGOUT})
   }
 }

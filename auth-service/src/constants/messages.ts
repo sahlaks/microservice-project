@@ -5,4 +5,5 @@ export const REGISTRATION = {
     WRONG_PASSWORD: "Wrong password!",
     ERROR: "An error occurred!",
     USER_VALID: "Login successfully!",
+    LOGOUT: 'Logged out successfully!'
   };

@@ -11,11 +11,14 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use('/', authRouter);
+app.use('/', authRouter
+);
 app.use(errorHandler);
 
 export const server = http.createServer(app); 

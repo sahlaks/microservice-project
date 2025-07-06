@@ -11,7 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const statusCode_1 = require("../../constants/statusCode");
-const setToken_1 = require("../../infrastructure/utils/setToken");
+const tokenHandler_1 = require("../../infrastructure/utils/tokenHandler");
+const messages_1 = require("../../constants/messages");
 class AuthController {
     constructor(authUseCase) {
         this.authUseCase = authUseCase;
@@ -23,7 +24,7 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.authUseCase.createUser(req.body);
             if (response.status && response.accessToken) {
-                (0, setToken_1.setAuthCookie)(res, response.accessToken);
+                (0, tokenHandler_1.setAuthCookie)(res, response.accessToken);
             }
             return res
                 .status(response.status ? statusCode_1.ENUM.CREATED : statusCode_1.ENUM.BAD_REQUEST)
@@ -37,11 +38,20 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.authUseCase.loginUser(req.body);
             if (response.status && response.accessToken) {
-                (0, setToken_1.setAuthCookie)(res, response.accessToken);
+                (0, tokenHandler_1.setAuthCookie)(res, response.accessToken);
             }
             return res
                 .status(response.status ? statusCode_1.ENUM.OK : statusCode_1.ENUM.UNAUTHORIZED)
                 .json({ status: response === null || response === void 0 ? void 0 : response.status, user: response === null || response === void 0 ? void 0 : response.user, message: response === null || response === void 0 ? void 0 : response.message });
+        });
+    }
+    //@desc Logout User
+    //@ROUTE POST /logout
+    //@acess User
+    logoutUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, tokenHandler_1.clearCookie)(req, res);
+            res.status(statusCode_1.ENUM.OK).json({ status: true, message: messages_1.REGISTRATION.LOGOUT });
         });
     }
 }

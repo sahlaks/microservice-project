@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      - JWT_SECRET=your-secret
+    networks:
+      - backend
+
+  project-service:
+    build: ./project-service
+    container_name: project-service
+    ports:
+      - "5002:5002"
+    depends_on:
+      - auth-service
+    environment:
+      - JWT_SECRET=your-secret
+    networks:
+      - backend
+
+  nginx:
+    build: ./nginx
+    container_name: api-gateway
+    ports:
+      - "5000:80"
+    depends_on:
+      - auth-service
+      - project-service
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

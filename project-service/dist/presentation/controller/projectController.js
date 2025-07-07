@@ -21,7 +21,9 @@ class ProjectController {
     //@acess User
     createProject(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const validatedData = projectSchema_1.projectSchema.parse(req.body);
+            console.log((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
             const response = yield this.projectUseCase.createProject(validatedData);
             if (response.status) {
                 res.status(statusCodes_1.STATUS_CODES.OK).json({
@@ -37,8 +39,10 @@ class ProjectController {
     //@acess User
     fetchAllProjects(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 4;
+            console.log((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
             const response = yield this.projectUseCase.fetchAllProjects(page, limit);
             if (response === null || response === void 0 ? void 0 : response.status) {
                 res.status(statusCodes_1.STATUS_CODES.OK).json({

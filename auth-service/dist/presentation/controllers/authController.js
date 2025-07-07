@@ -26,9 +26,11 @@ class AuthController {
             if (response.status && response.accessToken) {
                 (0, tokenHandler_1.setAuthCookie)(res, response.accessToken);
             }
-            return res
-                .status(response.status ? statusCode_1.ENUM.CREATED : statusCode_1.ENUM.BAD_REQUEST)
-                .json({ status: response === null || response === void 0 ? void 0 : response.status, user: response === null || response === void 0 ? void 0 : response.user, message: response === null || response === void 0 ? void 0 : response.message });
+            return res.status(response.status ? statusCode_1.ENUM.CREATED : statusCode_1.ENUM.BAD_REQUEST).json({
+                status: response === null || response === void 0 ? void 0 : response.status,
+                user: response === null || response === void 0 ? void 0 : response.user,
+                message: response === null || response === void 0 ? void 0 : response.message,
+            });
         });
     }
     //@desc Login a User
@@ -40,9 +42,22 @@ class AuthController {
             if (response.status && response.accessToken) {
                 (0, tokenHandler_1.setAuthCookie)(res, response.accessToken);
             }
-            return res
-                .status(response.status ? statusCode_1.ENUM.OK : statusCode_1.ENUM.UNAUTHORIZED)
-                .json({ status: response === null || response === void 0 ? void 0 : response.status, user: response === null || response === void 0 ? void 0 : response.user, message: response === null || response === void 0 ? void 0 : response.message });
+            return res.status(response.status ? statusCode_1.ENUM.OK : statusCode_1.ENUM.UNAUTHORIZED).json({
+                status: response === null || response === void 0 ? void 0 : response.status,
+                user: response === null || response === void 0 ? void 0 : response.user,
+                message: response === null || response === void 0 ? void 0 : response.message,
+            });
+        });
+    }
+    //@desc Validate User
+    //@route GET /me
+    //@acess User
+    validateUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            console.log('auth controller');
+            const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+            res.status(statusCode_1.ENUM.OK).json({ status: true, user: { id: userId } });
         });
     }
     //@desc Logout User

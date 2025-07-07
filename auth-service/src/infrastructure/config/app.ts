@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import authRouter from '../../presentation/routes/authRoutes';
 import { errorHandler } from '../../presentation/middlewares/errorHandler';
 
@@ -11,14 +12,13 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
-
+ 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-
-app.use('/', authRouter
-);
+app.use('/api/auth', authRouter);
 app.use(errorHandler);
 
 export const server = http.createServer(app); 

@@ -22,7 +22,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthUseCase = void 0;
 const messages_1 = require("../constants/messages");
-const jwtCreation_1 = require("../infrastructure/jwtCreation");
+const jwtCreation_1 = require("../infrastructure/utils/jwtCreation");
 const password_1 = require("../infrastructure/utils/password");
 class AuthUseCase {
     constructor(authRepository) {

@@ -7,6 +7,7 @@ exports.server = void 0;
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const cors_1 = __importDefault(require("cors"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const projectRoutes_1 = __importDefault(require("../../presentation/routes/projectRoutes"));
 const erorHandler_1 = require("../../presentation/middleware/erorHandler");
 const app = (0, express_1.default)();
@@ -18,6 +19,11 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use("/", projectRoutes_1.default);
+app.use((0, cookie_parser_1.default)());
+app.use((req, res, next) => {
+    console.log('Cookies:', req.cookies);
+    next();
+});
+app.use("/api/project", projectRoutes_1.default);
 app.use(erorHandler_1.errorHandler);
 exports.server = http_1.default.createServer(app);

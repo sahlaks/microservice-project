@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ProjectUseCase } from "../../usecase/projectUsecase";
 import { projectSchema } from "../../domain/types/projectSchema";
 import { STATUS_CODES } from "../../constants/statusCodes";
-import { any } from "zod";
+import { AuthRequest } from "../middleware/validateToken";
 
 export class ProjectController {
   constructor(private projectUseCase: ProjectUseCase) {}
@@ -10,8 +10,10 @@ export class ProjectController {
   //@desc Create a new Project
   //@route POST /create
   //@acess User
-  async createProject(req: Request, res: Response, next: NextFunction) {
+  async createProject(req: AuthRequest, res: Response, next: NextFunction) {
     const validatedData = projectSchema.parse(req.body);
+    console.log(req.user?.id);
+    
     const response = await this.projectUseCase.createProject(validatedData);
     if (response.status) {
       res.status(STATUS_CODES.OK).json({
@@ -25,10 +27,10 @@ export class ProjectController {
   //@desc Get all Projects from database
   //@route GET /fetch-all
   //@acess User
-  async fetchAllProjects(req: Request, res: Response, next: NextFunction) {
+  async fetchAllProjects(req: AuthRequest, res: Response, next: NextFunction) {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 4;
-
+ console.log(req.user?.id);
     const response = await this.projectUseCase.fetchAllProjects(page, limit);
     if (response?.status) {
       res.status(STATUS_CODES.OK).json({
@@ -45,7 +47,7 @@ export class ProjectController {
   //@desc Delete a Project from database
   //@route DELETE /delete
   //@acess User
-  async deleteProject(req: Request, res: Response, next: NextFunction) {
+  async deleteProject(req: AuthRequest, res: Response, next: NextFunction) {
     const id = req.query.id as string;
     const response = await this.projectUseCase.deleteProject(id);
     if (response.status) {
@@ -58,7 +60,7 @@ export class ProjectController {
   //@desc Edit a Project from database
   //@route PUT /update
   //@acess User
-  async editProject(req: Request, res: Response, next: NextFunction) {
+  async editProject(req: AuthRequest, res: Response, next: NextFunction) {
     const validatedData = projectSchema.parse(req.body);
     const id = req.query.id as string;
     const response = await this.projectUseCase.editProject(validatedData,id);

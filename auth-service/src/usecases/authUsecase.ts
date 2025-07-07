@@ -1,7 +1,7 @@
 import { REGISTRATION } from "../constants/messages";
 import { IAuthRepository } from "../domain/interface/IAuthRepository";
 import { loginUser, signupUser } from "../domain/types/authUser";
-import { generateToken } from "../infrastructure/jwtCreation";
+import { generateToken } from "../infrastructure/utils/jwtCreation";
 import {
   checkPasswordMatch,
   generatePassword,

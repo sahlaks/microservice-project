@@ -48,9 +48,9 @@ export class AuthController {
   //@acess User
   async validateUser(req: AuthRequest, res: Response, next: NextFunction) {
     console.log('auth controller');
-    
     const userId = req.user?.id;
-    res.status(ENUM.OK).json({ status: true, user: { id: userId } });
+    const message = req.user?.message ;
+    res.status(ENUM.OK).json({ status: true, user: { id: userId, message: message} });
   }
 
   //@desc Logout User

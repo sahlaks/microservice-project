@@ -13,6 +13,7 @@ exports.ProjectUseCase = void 0;
 const mongoose_1 = require("mongoose");
 const customErrors_1 = require("../constants/customErrors");
 const messages_1 = require("../constants/messages");
+const producer_1 = require("../infrastructure/kafka/producer");
 class ProjectUseCase {
     constructor(projectRepository) {
         this.projectRepository = projectRepository;
@@ -54,6 +55,14 @@ class ProjectUseCase {
             if (!deleted) {
                 throw new customErrors_1.NotFoundError("Project not found");
             }
+            yield producer_1.producer.send({
+                topic: "project-deleted",
+                messages: [
+                    {
+                        value: JSON.stringify({ projectId: id })
+                    }
+                ]
+            });
             return { status: true, message: messages_1.PROJECT.PROJECT_DELETED };
         });
     }

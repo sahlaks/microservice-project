@@ -6,6 +6,7 @@ import { verifyAccessToken } from "../../infrastructure/utils/verifyToken";
 export interface AuthRequest extends Request {
   user?: {
     id: string;
+     message?: string;
   };
 }
 
@@ -19,7 +20,6 @@ export const validateTokens = async (
     console.log('inside auth-service');
     
     const accessToken = req.cookies?.access_token;
-console.log('auth',accessToken);
 
     if (!accessToken) {
       res.status(ENUM.UNAUTHORIZED).json({
@@ -29,7 +29,6 @@ console.log('auth',accessToken);
     }
 
     const decoded = verifyAccessToken(accessToken);
-console.log(decoded);
 
     if (!decoded || !decoded.id) {
       res.status(ENUM.UNAUTHORIZED).json({

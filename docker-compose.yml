@@ -1,6 +1,49 @@
 version: "3.8"
 
 services:
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    ports:
+      - "9094:9094"
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_KRAFT_CLUSTER_ID: abcd1234
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,EXTERNAL://:9094,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://kafka:9094
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+    networks:
+      - backend
+
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local-cluster
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  kafka-admin:
+    build: ./kafka
+    container_name: kafka-admin
+    depends_on:
+      - kafka
+    networks:
+      - backend
+    restart: "no"
+
   auth-service:
     build: ./auth-service
     container_name: auth-service
@@ -18,6 +61,21 @@ services:
       - "5002:5002"
     depends_on:
       - auth-service
+      - kafka
+    environment:
+      - JWT_SECRET=your-secret
+    networks:
+      - backend
+
+  like-service:
+    build: ./like-service
+    container_name: like-service
+    ports:
+      - "5003:5003"
+    depends_on:
+      - auth-service
+      - project-service
+      - kafka
     environment:
       - JWT_SECRET=your-secret
     networks:
@@ -31,6 +89,7 @@ services:
     depends_on:
       - auth-service
       - project-service
+      - like-service
     networks:
       - backend
 

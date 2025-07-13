@@ -3,6 +3,7 @@ import { InternalServerError, NotFoundError } from "../constants/customErrors";
 import { PROJECT } from "../constants/messages";
 import { IProjectRepository } from "../domain/interface/IProjectRepository";
 import { ProjectType } from "../domain/types/projectSchema";
+import { producer } from "../infrastructure/kafka/producer";
 
 export class ProjectUseCase {
   constructor(private projectRepository: IProjectRepository) {}
@@ -43,6 +44,14 @@ export class ProjectUseCase {
     if(!deleted) {
         throw new NotFoundError("Project not found")
     }
+    await producer.send({
+      topic:"project-deleted",
+      messages: [
+        {
+          value: JSON.stringify({projectId: id})
+        }
+      ]
+    })
     return { status: true, message: PROJECT.PROJECT_DELETED}
   }
 

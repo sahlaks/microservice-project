@@ -18,7 +18,6 @@ const validateTokens = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     try {
         console.log('inside auth-service');
         const accessToken = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.access_token;
-        console.log('auth', accessToken);
         if (!accessToken) {
             res.status(statusCode_1.ENUM.UNAUTHORIZED).json({
                 status: false,
@@ -26,7 +25,6 @@ const validateTokens = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             });
         }
         const decoded = (0, verifyToken_1.verifyAccessToken)(accessToken);
-        console.log(decoded);
         if (!decoded || !decoded.id) {
             res.status(statusCode_1.ENUM.UNAUTHORIZED).json({
                 status: false,
